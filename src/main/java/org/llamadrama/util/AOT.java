@@ -1,9 +1,11 @@
-package org.llamadrama;
+package org.llamadrama.util;
 
 import org.llamadrama.core.Llama;
 import org.llamadrama.core.ModelLoader;
 import org.llamadrama.core.Options;
 import org.llamadrama.core.Timer;
+import org.llamadrama.gguf.GGMLTensorEntry;
+import org.llamadrama.gguf.GGUF;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;

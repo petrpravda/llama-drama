@@ -1,7 +1,8 @@
-package org.llamadrama;
+package org.llamadrama.tensor;
 
 import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorSpecies;
+import org.llamadrama.gguf.GGMLType;
 
 import java.util.Arrays;
 

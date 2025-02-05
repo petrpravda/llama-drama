@@ -1,4 +1,6 @@
-package org.llamadrama;
+package org.llamadrama.math;
+
+import org.llamadrama.util.Pair;
 
 public final class RoPE {
     public static Pair<float[], float[]> precomputeFreqsCis(int contextLength, int headSize, double theta,

@@ -1,4 +1,4 @@
-package org.llamadrama;
+package org.llamadrama.util;
 
 import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;

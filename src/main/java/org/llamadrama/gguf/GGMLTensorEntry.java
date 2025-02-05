@@ -1,4 +1,4 @@
-package org.llamadrama;
+package org.llamadrama.gguf;
 
 import java.lang.foreign.MemorySegment;
 

@@ -1,9 +1,10 @@
-package org.llamadrama;
+package org.llamadrama.tensor;
 
 import jdk.incubator.vector.ByteVector;
 import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorOperators;
 import jdk.incubator.vector.VectorSpecies;
+import org.llamadrama.gguf.GGMLType;
 
 import java.lang.foreign.MemorySegment;
 import java.nio.ByteOrder;

@@ -1,4 +1,4 @@
-package org.llamadrama;
+package org.llamadrama.gguf;
 
 public enum GGMLType {
     F32(Float.BYTES),

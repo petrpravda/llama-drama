@@ -1,4 +1,6 @@
-package org.llamadrama;
+package org.llamadrama.sampling;
+
+import org.llamadrama.tensor.FloatTensor;
 
 @FunctionalInterface
 public interface Sampler {

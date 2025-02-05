@@ -1,4 +1,4 @@
-package org.llamadrama;
+package org.llamadrama.tokenizer;
 
 import java.util.Map;
 import java.util.OptionalInt;

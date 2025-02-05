@@ -1,10 +1,10 @@
 package org.llamadrama.core;
 
-import org.llamadrama.ArrayFloatTensor;
-import org.llamadrama.FloatTensor;
-import org.llamadrama.Parallel;
-import org.llamadrama.Sampler;
-import org.llamadrama.Tokenizer;
+import org.llamadrama.tensor.ArrayFloatTensor;
+import org.llamadrama.tensor.FloatTensor;
+import org.llamadrama.util.Parallel;
+import org.llamadrama.sampling.Sampler;
+import org.llamadrama.tokenizer.Tokenizer;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;

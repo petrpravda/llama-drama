@@ -1,4 +1,6 @@
-package org.llamadrama;
+package org.llamadrama.util;
+
+import org.llamadrama.tokenizer.Tokenizer;
 
 import java.util.ArrayList;
 import java.util.List;

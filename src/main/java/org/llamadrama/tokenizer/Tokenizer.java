@@ -1,4 +1,6 @@
-package org.llamadrama;
+package org.llamadrama.tokenizer;
+
+import org.llamadrama.util.Pair;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

@@ -1,8 +1,10 @@
-package org.llamadrama;
+package org.llamadrama.tensor;
 
 import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorShape;
 import jdk.incubator.vector.VectorSpecies;
+import org.llamadrama.gguf.GGMLType;
+import org.llamadrama.util.Parallel;
 import sun.misc.Unsafe;
 
 import java.lang.foreign.MemorySegment;
@@ -146,7 +148,7 @@ public abstract class FloatTensor {
         return maxIndex;
     }
 
-    int argmax() {
+    public int argmax() {
         return argmax(0, size());
     }
 

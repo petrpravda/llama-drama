@@ -19,11 +19,11 @@
 // Enjoy!
 package org.llamadrama.core;
 
-import org.llamadrama.AOT;
-import org.llamadrama.CategoricalSampler;
-import org.llamadrama.ChatFormat;
-import org.llamadrama.Sampler;
-import org.llamadrama.ToppSampler;
+import org.llamadrama.util.AOT;
+import org.llamadrama.sampling.CategoricalSampler;
+import org.llamadrama.util.ChatFormat;
+import org.llamadrama.sampling.Sampler;
+import org.llamadrama.sampling.ToppSampler;
 
 import java.io.IOException;
 import java.util.ArrayList;

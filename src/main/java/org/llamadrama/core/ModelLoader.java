@@ -1,17 +1,17 @@
 package org.llamadrama.core;
 
-import org.llamadrama.BF16FloatTensor;
-import org.llamadrama.F16FloatTensor;
-import org.llamadrama.FloatTensor;
-import org.llamadrama.GGMLTensorEntry;
-import org.llamadrama.GGMLType;
-import org.llamadrama.GGUF;
-import org.llamadrama.Pair;
-import org.llamadrama.Q4_0FloatTensor;
-import org.llamadrama.Q8_0FloatTensor;
-import org.llamadrama.RoPE;
-import org.llamadrama.Tokenizer;
-import org.llamadrama.Vocabulary;
+import org.llamadrama.tensor.BF16FloatTensor;
+import org.llamadrama.tensor.F16FloatTensor;
+import org.llamadrama.tensor.FloatTensor;
+import org.llamadrama.gguf.GGMLTensorEntry;
+import org.llamadrama.gguf.GGMLType;
+import org.llamadrama.gguf.GGUF;
+import org.llamadrama.util.Pair;
+import org.llamadrama.tensor.Q4_0FloatTensor;
+import org.llamadrama.tensor.Q8_0FloatTensor;
+import org.llamadrama.math.RoPE;
+import org.llamadrama.tokenizer.Tokenizer;
+import org.llamadrama.tokenizer.Vocabulary;
 
 import java.io.IOException;
 import java.nio.ByteOrder;
