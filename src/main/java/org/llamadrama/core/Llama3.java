@@ -19,7 +19,6 @@
 // Enjoy!
 package org.llamadrama.core;
 
-import org.llamadrama.util.AOT;
 import org.llamadrama.sampling.CategoricalSampler;
 import org.llamadrama.util.ChatFormat;
 import org.llamadrama.sampling.Sampler;
@@ -64,8 +63,8 @@ public class Llama3 {
         return sampler;
     }
 
-    static void runInteractive(Llama model, Sampler sampler, Options options) {
-        Llama.State state = null;
+    static void runInteractive(LlamaModel model, Sampler sampler, Options options) {
+        LlamaModel.State state = null;
         List<Integer> conversationTokens = new ArrayList<>();
         ChatFormat chatFormat = new ChatFormat(model.tokenizer());
         conversationTokens.add(chatFormat.beginOfText);
@@ -95,7 +94,7 @@ public class Llama3 {
             conversationTokens.addAll(chatFormat.encodeMessage(new ChatFormat.Message(ChatFormat.Role.USER, userText)));
             conversationTokens.addAll(chatFormat.encodeHeader(new ChatFormat.Message(ChatFormat.Role.ASSISTANT, "")));
             Set<Integer> stopTokens = chatFormat.getStopTokens();
-            List<Integer> responseTokens = Llama.generateTokens(model, state, startPosition, conversationTokens.subList(startPosition, conversationTokens.size()), stopTokens, options.maxTokens(), sampler, options.echo(), token -> {
+            List<Integer> responseTokens = LlamaModel.generateTokens(model, state, startPosition, conversationTokens.subList(startPosition, conversationTokens.size()), stopTokens, options.maxTokens(), sampler, options.echo(), token -> {
                 if (options.stream()) {
                     if (!model.tokenizer().isSpecialToken(token)) {
                         System.out.print(model.tokenizer().decode(List.of(token)));
@@ -121,8 +120,8 @@ public class Llama3 {
         }
     }
 
-    static void runInstructOnce(Llama model, Sampler sampler, Options options) {
-        Llama.State state = model.createNewState(BATCH_SIZE);
+    static void runInstructOnce(LlamaModel model, Sampler sampler, Options options) {
+        LlamaModel.State state = model.createNewState(BATCH_SIZE);
         ChatFormat chatFormat = new ChatFormat(model.tokenizer());
 
         List<Integer> promptTokens = new ArrayList<>();
@@ -134,7 +133,7 @@ public class Llama3 {
         promptTokens.addAll(chatFormat.encodeHeader(new ChatFormat.Message(ChatFormat.Role.ASSISTANT, "")));
 
         Set<Integer> stopTokens = chatFormat.getStopTokens();
-        List<Integer> responseTokens = Llama.generateTokens(model, state, 0, promptTokens, stopTokens, options.maxTokens(), sampler, options.echo(), token -> {
+        List<Integer> responseTokens = LlamaModel.generateTokens(model, state, 0, promptTokens, stopTokens, options.maxTokens(), sampler, options.echo(), token -> {
             if (options.stream()) {
                 if (!model.tokenizer().isSpecialToken(token)) {
                     System.out.print(model.tokenizer().decode(List.of(token)));
@@ -157,7 +156,7 @@ public class Llama3 {
 //            // No compatible preloaded model found, fallback to fully parse and load the specified file.
 //            model = ModelLoader.loadModel(options.modelPath(), options.maxTokens(), true);
 //        }
-        Llama model = ModelLoader.loadModel(options.modelPath(), options.maxTokens(), true);
+        LlamaModel model = ModelLoader.loadModel(options.modelPath(), options.maxTokens(), true);
         Sampler sampler = selectSampler(model.configuration().vocabularySize, options.temperature(), options.topp(), options.seed());
         if (options.interactive()) {
             runInteractive(model, sampler, options);

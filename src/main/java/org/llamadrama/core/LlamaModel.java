@@ -15,7 +15,7 @@ import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public record Llama(Configuration configuration, Tokenizer tokenizer, Weights weights) {
+public record LlamaModel(Configuration configuration, Tokenizer tokenizer, Weights weights) {
     public State createNewState(int batchsize) {
         State state = new State(configuration(), batchsize);
         state.latestToken = tokenizer.getSpecialTokens().get("<|begin_of_text|>");
@@ -159,7 +159,7 @@ public record Llama(Configuration configuration, Tokenizer tokenizer, Weights we
         out.mapWithIndexInPlace(0, size, (value, index) -> weight.get(index) * (finalss * x.getFloat(index)));
     }
 
-    static FloatTensor forward(Llama model, State state, int[] tokens, int position, boolean computeLogits) {
+    static FloatTensor forward(LlamaModel model, State state, int[] tokens, int position, boolean computeLogits) {
         // a few convenience variables
         Configuration config = model.configuration();
         Weights weights = model.weights();
@@ -332,7 +332,7 @@ public record Llama(Configuration configuration, Tokenizer tokenizer, Weights we
      * @param onTokenGenerated callback, if non-null, it's called every time a token is inferred e.g. it's not called when ingesting prompt tokens
      * @return list of generated/inferred tokens, including the stop token, if any e.g. does not include any token from the prompt
      */
-    public static List<Integer> generateTokens(Llama model, State state, int startPosition, List<Integer> promptTokens, Set<Integer> stopTokens, int maxTokens, Sampler sampler, boolean echo,
+    public static List<Integer> generateTokens(LlamaModel model, State state, int startPosition, List<Integer> promptTokens, Set<Integer> stopTokens, int maxTokens, Sampler sampler, boolean echo,
             IntConsumer onTokenGenerated) {
         long startNanos = System.nanoTime();
         long startGen = 0;

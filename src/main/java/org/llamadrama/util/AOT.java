@@ -1,6 +1,6 @@
 package org.llamadrama.util;
 
-import org.llamadrama.core.Llama;
+import org.llamadrama.core.LlamaModel;
 import org.llamadrama.core.ModelLoader;
 import org.llamadrama.core.Options;
 import org.llamadrama.core.Timer;
@@ -24,7 +24,7 @@ import java.util.Objects;
  * if the specified and preloaded file names (base name) match.
  */
 public final class AOT {
-    record PartialModel(String modelFileName, Llama model, long tensorDataOffset,
+    record PartialModel(String modelFileName, LlamaModel model, long tensorDataOffset,
                         Map<String, GGUF.GGUFTensorInfo> tensorInfos) {
     }
 
@@ -58,7 +58,7 @@ public final class AOT {
      * The file name (base name) must match with the preloaded file name.
      * No checksum/hash is checked for performance reasons.
      */
-    public static Llama tryUsePreLoaded(Path modelPath, int contextLength) throws IOException {
+    public static LlamaModel tryUsePreLoaded(Path modelPath, int contextLength) throws IOException {
         PartialModel preLoaded = AOT.PRELOADED_GGUF;
         if (preLoaded == null) {
             return null; // no pre-loaded model stored
@@ -69,13 +69,13 @@ public final class AOT {
             // Preloaded and specified model file names didn't match.
             return null;
         }
-        Llama baseModel = preLoaded.model();
+        LlamaModel baseModel = preLoaded.model();
         try (var timer = Timer.log("Load tensors from pre-loaded model");
              var fileChannel = FileChannel.open(modelPath, StandardOpenOption.READ)) {
             // Load only the tensors (mmap slices).
             Map<String, GGMLTensorEntry> tensorEntries = GGUF.loadTensors(fileChannel, preLoaded.tensorDataOffset(), preLoaded.tensorInfos());
-            Llama.Weights weights = ModelLoader.loadWeights(tensorEntries, baseModel.configuration());
-            return new Llama(baseModel.configuration().withContextLength(contextLength), baseModel.tokenizer(), weights);
+            LlamaModel.Weights weights = ModelLoader.loadWeights(tensorEntries, baseModel.configuration());
+            return new LlamaModel(baseModel.configuration().withContextLength(contextLength), baseModel.tokenizer(), weights);
         }
     }
 }

@@ -40,19 +40,19 @@ public final class ModelLoader {
         return new Vocabulary(tokens, null);
     }
 
-    public static Llama loadModel(Path ggufPath, int contextLength, boolean loadWeights) throws IOException {
+    public static LlamaModel loadModel(Path ggufPath, int contextLength, boolean loadWeights) throws IOException {
         GGUF gguf = GGUF.loadModel(ggufPath);
         FileChannel fileChannel = FileChannel.open(ggufPath, StandardOpenOption.READ);
         return loadModel(fileChannel, gguf, contextLength, loadWeights);
     }
 
-    public static Llama loadModel(FileChannel fileChannel, GGUF gguf, int contextLength, boolean loadWeights) throws IOException {
+    public static LlamaModel loadModel(FileChannel fileChannel, GGUF gguf, int contextLength, boolean loadWeights) throws IOException {
         try (var ignored = Timer.log("Load LlaMa model")) {
             Map<String, Object> metadata = gguf.getMetadata();
             Vocabulary vocabulary = loadVocabulary(metadata);
             Tokenizer tokenizer = createTokenizer(metadata, vocabulary);
 
-            Llama.Configuration config = new Llama.Configuration(
+            LlamaModel.Configuration config = new LlamaModel.Configuration(
                     (int) metadata.get("llama.embedding_length"),
                     (int) metadata.get("llama.feed_forward_length"),
                     (int) metadata.get("llama.block_count"),
@@ -68,16 +68,16 @@ public final class ModelLoader {
                     (float) metadata.getOrDefault("llama.rope.freq_base", 10000f)
             ).withContextLength(contextLength);
 
-            Llama.Weights weights = null;
+            LlamaModel.Weights weights = null;
             if (loadWeights) {
                 Map<String, GGMLTensorEntry> tensorEntries = GGUF.loadTensors(fileChannel, gguf.getTensorDataOffset(), gguf.getTensorInfos());
                 weights = loadWeights(tensorEntries, config);
             }
-            return new Llama(config, tokenizer, weights);
+            return new LlamaModel(config, tokenizer, weights);
         }
     }
 
-    public static Llama.Weights loadWeights(Map<String, GGMLTensorEntry> tensorEntries, Llama.Configuration config) {
+    public static LlamaModel.Weights loadWeights(Map<String, GGMLTensorEntry> tensorEntries, LlamaModel.Configuration config) {
         boolean ropeScaling = tensorEntries.containsKey("rope_freqs");
         float scaleFactor = 8;
         float loFreqFactor = 1;
@@ -89,7 +89,7 @@ public final class ModelLoader {
         float[] ropeFreqsImag = ropeFreqs.second();
 
         GGMLTensorEntry tokenEmbeddings = tensorEntries.get("token_embd.weight");
-        Llama.Weights qw = new Llama.Weights(
+        LlamaModel.Weights qw = new LlamaModel.Weights(
                 loadQuantized(tokenEmbeddings),
                 loadArrayOfFloatBuffer(config.numberOfLayers, i -> tensorEntries.get("blk." + i + ".attn_norm.weight")),
                 loadArrayOfQuantized(config.numberOfLayers, i -> tensorEntries.get("blk." + i + ".attn_q.weight")),
