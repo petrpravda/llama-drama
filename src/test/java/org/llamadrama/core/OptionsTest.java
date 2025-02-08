@@ -2,6 +2,7 @@ package org.llamadrama.core;
 
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,4 +68,26 @@ class OptionsTest {
         assertEquals("--stream", options.get(2).name());
         assertEquals("false", options.get(2).value());
     }
+
+    @Test
+    public void testParseCommandLineWithChatAndMaxTokens() {
+        String input = "-m /home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf --chat -n 2048";
+        List<Options.CommandLineOption> options = Options.parseCommandLine(input);
+        assertEquals(3, options.size());
+        assertEquals("-m", options.get(0).name());
+        assertEquals("/home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf", options.get(0).value());
+        assertEquals("--chat", options.get(1).name());
+        assertEquals("", options.get(1).value());
+        assertEquals("-n", options.get(2).name());
+        assertEquals("2048", options.get(2).value());
+    }
+
+//    @Test
+//    public void testParseOptions() {
+//        String[] args = {"-m", "/home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf", "--chat", "-n", "2048"};
+//        Options options = Options.parseOptions(args);
+//        assertEquals(Paths.get("/home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf"), options.modelPath());
+//        assertTrue(options.interactive());
+//        assertEquals(2048, options.maxTokens());
+//    }
 }
