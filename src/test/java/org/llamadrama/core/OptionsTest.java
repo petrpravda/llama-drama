@@ -82,6 +82,19 @@ class OptionsTest {
         assertEquals("2048", options.get(2).value());
     }
 
+    @Test
+    public void testParseCommandLineWithPromptAndStreamFalse() {
+        String input = "-m /home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf --prompt \"Print 5 emojis\" --stream=false";
+        List<Options.CommandLineOption> options = Options.parseCommandLine(input);
+        assertEquals(3, options.size());
+        assertEquals("-m", options.get(0).name());
+        assertEquals("/home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf", options.get(0).value());
+        assertEquals("--prompt", options.get(1).name());
+        assertEquals("Print 5 emojis", options.get(1).value());
+        assertEquals("--stream", options.get(2).name());
+        assertEquals("false", options.get(2).value());
+    }
+
 //    @Test
 //    public void testParseOptions() {
 //        String[] args = {"-m", "/home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf", "--chat", "-n", "2048"};

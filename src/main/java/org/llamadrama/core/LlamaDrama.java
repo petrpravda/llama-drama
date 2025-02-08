@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.random.RandomGenerator;
 import java.util.random.RandomGeneratorFactory;
 
-public class Llama3 {
+public class LlamaDrama {
     // Batch-size used in prompt evaluation.
     private static final int BATCH_SIZE = Integer.getInteger("llama.BatchSize", 16);
 
@@ -151,6 +151,13 @@ public class Llama3 {
 
     public static void main(String[] args) throws IOException {
         Options options = Options.parseOptions(args);
+        System.out.println(options);
+
+//        Options[modelPath=/home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf, prompt=Print 5 emojis, systemPrompt=null, interactive=false, temperature=0.1, topp=0.95, seed=106727893149535, maxTokens=512, stream=false, echo=false]
+//        Options[modelPath=/home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf, prompt=null, systemPrompt=null, interactive=true, temperature=0.1, topp=0.95, seed=42, maxTokens=2048, stream=true, echo=false]
+
+
+
 //        Llama model = AOT.tryUsePreLoaded(options.modelPath(), options.maxTokens());
 //        if (model == null) {
 //            // No compatible preloaded model found, fallback to fully parse and load the specified file.

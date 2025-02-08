@@ -49,7 +49,11 @@ public record Options(Path modelPath, String prompt, String systemPrompt, boolea
     }
 
     static Options parseOptions(String[] args) {
-        List<CommandLineOption> options = parseCommandLine(String.join(" ", args));
+        String input = Arrays.stream(args)
+                .map(arg -> arg.contains(" ") ? "\"" + arg + "\"" : arg)
+                .collect(Collectors.joining(" "));
+
+        List<CommandLineOption> options = parseCommandLine(input);
 
         Map<String, String> optionMap = options.stream()
                 .collect(Collectors.toMap(CommandLineOption::name, CommandLineOption::value));
