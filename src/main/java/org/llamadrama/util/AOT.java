@@ -21,7 +21,7 @@ import java.util.Objects;
  * <p>
  * To preload a model at build time, pass {@code -Dllama.PreloadGGUF=/path/to/model.gguf}
  * to the native-image builder command. At runtime, the preloaded model will be used
- * iff the specified and preloaded file names (base name) match.
+ * if the specified and preloaded file names (base name) match.
  */
 public final class AOT {
     record PartialModel(String modelFileName, Llama model, long tensorDataOffset,

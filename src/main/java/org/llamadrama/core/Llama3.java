@@ -152,11 +152,12 @@ public class Llama3 {
 
     public static void main(String[] args) throws IOException {
         Options options = Options.parseOptions(args);
-        Llama model = AOT.tryUsePreLoaded(options.modelPath(), options.maxTokens());
-        if (model == null) {
-            // No compatible preloaded model found, fallback to fully parse and load the specified file.
-            model = ModelLoader.loadModel(options.modelPath(), options.maxTokens(), true);
-        }
+//        Llama model = AOT.tryUsePreLoaded(options.modelPath(), options.maxTokens());
+//        if (model == null) {
+//            // No compatible preloaded model found, fallback to fully parse and load the specified file.
+//            model = ModelLoader.loadModel(options.modelPath(), options.maxTokens(), true);
+//        }
+        Llama model = ModelLoader.loadModel(options.modelPath(), options.maxTokens(), true);
         Sampler sampler = selectSampler(model.configuration().vocabularySize, options.temperature(), options.topp(), options.seed());
         if (options.interactive()) {
             runInteractive(model, sampler, options);
