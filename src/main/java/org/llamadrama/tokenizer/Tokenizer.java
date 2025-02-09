@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -97,12 +98,8 @@ public class Tokenizer {
     }
 
     private static List<String> findAll(Pattern pattern, String text) {
-        List<String> allMatches = new ArrayList<>();
         Matcher matcher = pattern.matcher(text);
-        while (matcher.find()) {
-            allMatches.add(matcher.group());
-        }
-        return allMatches;
+        return matcher.results().map(MatchResult::group).toList();
     }
 
     /**
