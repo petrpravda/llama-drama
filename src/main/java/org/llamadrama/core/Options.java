@@ -12,17 +12,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public record Options(Path modelPath, String prompt, String systemPrompt, boolean interactive,
-                      float temperature, float topp, long seed, int maxTokens, boolean stream, boolean echo) {
+                      float temperature, float topp, long seed, int maxTokens, boolean stream, boolean echo,
+                      boolean help) {
 
     public static final int DEFAULT_MAX_TOKENS = 512;
 
-    private static void displayHelp() {
+    public static void displayHelp() {
         System.out.println("Usage: java Llama3 [options]");
         System.out.println("Options:");
         for (OptParam param : OptParam.values()) {
             System.out.println("  " + param.formatHelp());
         }
-        System.out.println("  --help                     Display this help message");
     }
 
     public record CommandLineOption(String name, String value) {
@@ -74,7 +74,8 @@ public record Options(Path modelPath, String prompt, String systemPrompt, boolea
                 (Long) getValue.apply(OptParam.SEED),
                 (Integer) getValue.apply(OptParam.MAX_TOKENS),
                 (Boolean) getValue.apply(OptParam.STREAM),
-                (Boolean) getValue.apply(OptParam.ECHO)
+                (Boolean) getValue.apply(OptParam.ECHO),
+                (Boolean) getValue.apply(OptParam.HELP)
         );
     }
 
@@ -88,8 +89,9 @@ public record Options(Path modelPath, String prompt, String systemPrompt, boolea
         MAX_TOKENS("--max-tokens,-n", "<int>", "Max tokens", Integer::parseInt, DEFAULT_MAX_TOKENS),
         STREAM("--stream", "<boolean>", "Enable streaming", Boolean::parseBoolean, true),
         ECHO("--echo", "<boolean>", "Echo output", Boolean::parseBoolean, false),
-        INTERACTIVE("--interactive,--chat,-i", "", "Run in chat mode", s -> true, true),
-        INSTRUCT("--instruct", "", "Run in instruct mode", s -> true, true);
+        INTERACTIVE("--interactive,--chat,-i", "<boolean>", "Run in chat mode", s -> true, true),
+        INSTRUCT("--instruct", "<boolean>", "Run in instruct mode", s -> true, true),
+        HELP("--help", "<boolean>", "Display this help message", s -> true, false);
 
         final Set<String> names;
         final String placeholder;
@@ -106,9 +108,9 @@ public record Options(Path modelPath, String prompt, String systemPrompt, boolea
         }
 
         public String formatHelp() {
-            return STR."\{names.stream()
+            return "%s %s".formatted(names.stream()
                     .map(name -> name + (placeholder.isEmpty() ? "" : " " + placeholder))
-                    .collect(Collectors.joining(", "))} \{description}";
+                    .collect(Collectors.joining(", ")), description);
         }
     }
 }

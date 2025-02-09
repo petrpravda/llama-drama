@@ -94,13 +94,4 @@ class OptionsTest {
         assertEquals("--stream", options.get(2).name());
         assertEquals("false", options.get(2).value());
     }
-
-//    @Test
-//    public void testParseOptions() {
-//        String[] args = {"-m", "/home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf", "--chat", "-n", "2048"};
-//        Options options = Options.parseOptions(args);
-//        assertEquals(Paths.get("/home/petr/.models/Llama-3.2-1B-Instruct-Q4_0.gguf"), options.modelPath());
-//        assertTrue(options.interactive());
-//        assertEquals(2048, options.maxTokens());
-//    }
 }

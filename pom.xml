@@ -10,6 +10,7 @@
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
@@ -47,6 +48,9 @@
             <arg>--add-modules</arg>
             <arg>jdk.incubator.vector</arg>
             <arg>--enable-preview</arg>
+<!--            <arg>-Xlint:preview</arg>-->
+<!--            <arg>&#45;&#45;add-exports=java.base/sun.misc=ALL-UNNAMED</arg>-->
+<!--            <arg>-Xlint:-all,-restriction</arg>-->
           </compilerArgs>
         </configuration>
       </plugin>
@@ -56,7 +60,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.5.0</version>
         <configuration>
-          <argLine>--add-modules jdk.incubator.vector</argLine>
+          <argLine>--add-modules jdk.incubator.vector --enable-preview</argLine>
         </configuration>
       </plugin>
     </plugins>

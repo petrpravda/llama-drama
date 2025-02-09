@@ -163,6 +163,17 @@ public class LlamaDrama {
 //            // No compatible preloaded model found, fallback to fully parse and load the specified file.
 //            model = ModelLoader.loadModel(options.modelPath(), options.maxTokens(), true);
 //        }
+
+        if (options.help()) {
+            Options.displayHelp();
+            System.exit(0);
+        }
+
+        if (options.modelPath() == null) {
+            System.err.println("Model needs to be specified.");
+            System.exit(1);
+        }
+
         LlamaModel model = ModelLoader.loadModel(options.modelPath(), options.maxTokens(), true);
         Sampler sampler = selectSampler(model.configuration().vocabularySize, options.temperature(), options.topp(), options.seed());
         if (options.interactive()) {
