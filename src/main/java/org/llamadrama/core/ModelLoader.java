@@ -31,13 +31,13 @@ public final class ModelLoader {
 
     private static final String LLAMA_3_PATTERN = "(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\\r\\n\\p{L}\\p{N}]?\\p{L}+|\\p{N}{1,3}| ?[^\\s\\p{L}\\p{N}]+[\\r\\n]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+";
 
-    private static Vocabulary loadVocabulary(Map<String, Object> metadata) {
+    private static Vocabulary loadTokenizerVocabulary(Map<String, Object> metadata) {
         String model = (String) metadata.get("tokenizer.ggml.model");
         if (!TOKENIZER_LLAMA_3_MODEL.equals(model)) {
             throw new IllegalArgumentException("expected " + TOKENIZER_LLAMA_3_MODEL + " but found " + model);
         }
         String[] tokens = (String[]) metadata.get("tokenizer.ggml.tokens");
-        return new Vocabulary(tokens, null);
+        return new Vocabulary(tokens);
     }
 
     public static LlamaModel loadModel(Path ggufPath, int contextLength, boolean loadWeights) throws IOException {
@@ -49,7 +49,7 @@ public final class ModelLoader {
     public static LlamaModel loadModel(FileChannel fileChannel, GGUF gguf, int contextLength, boolean loadWeights) throws IOException {
         try (var ignored = Timer.log("Load LlaMa model")) {
             Map<String, Object> metadata = gguf.getMetadata();
-            Vocabulary vocabulary = loadVocabulary(metadata);
+            Vocabulary vocabulary = loadTokenizerVocabulary(metadata);
             Tokenizer tokenizer = createTokenizer(metadata, vocabulary);
 
             LlamaModel.Configuration config = new LlamaModel.Configuration(

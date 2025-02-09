@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,13 +29,6 @@ public class Tokenizer {
     private final Map<Pair<Integer, Integer>, Integer> merges;
     private final Map<String, Integer> specialTokens;
 
-    public String regexPattern() {
-        if (compiledPattern == null) {
-            return null;
-        }
-        return compiledPattern.pattern();
-    }
-
     public Map<String, Integer> getSpecialTokens() {
         return specialTokens;
     }
@@ -43,9 +37,9 @@ public class Tokenizer {
         return specialTokens.containsValue(tokenIndex);
     }
 
-    public Tokenizer(Vocabulary vocabulary, List<Pair<Integer, Integer>> merges, String regexPattern, Map<String, Integer> specialTokens) {
+    public Tokenizer(Vocabulary vocabulary, List<Pair<Integer, Integer>> merges, String acceptingPattern, Map<String, Integer> specialTokens) {
         this.vocabulary = vocabulary;
-        this.compiledPattern = regexPattern != null ? Pattern.compile(regexPattern) : null;
+        this.compiledPattern = acceptingPattern != null ? Pattern.compile(acceptingPattern) : null;
         this.specialTokens = new HashMap<>(specialTokens);
         this.merges = new HashMap<>();
         for (Pair<Integer, Integer> pair : merges) {
@@ -140,7 +134,7 @@ public class Tokenizer {
         // let's begin. first, convert all bytes to integers in range 0..255
         List<Integer> ids = new ArrayList<>();
         for (int b : chunk.toCharArray()) {
-            int tokenIndex = this.vocabulary.getIndex(String.valueOf((char) b)).orElseThrow();
+            int tokenIndex = this.vocabulary.getIndex(String.valueOf((char) b)).orElseThrow(() -> new NoSuchElementException("Token or special token \"%s\" not present, failed on \"%c\".".formatted(chunk, b)));
             ids.add(tokenIndex);
         }
 
