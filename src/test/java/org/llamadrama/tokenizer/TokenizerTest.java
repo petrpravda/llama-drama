@@ -21,11 +21,8 @@ class TokenizerTest {
 
     @BeforeEach
     void setUp() {
-        // Create a simple vocabulary for testing
-        //Map<String, Integer> vocabMap = new HashMap<>();
         Vocabulary vocabulary = new Vocabulary(new String[]{
                 "a", "b", "c", "ab", "h", "e", "l", "o", "t", "s", "1", "2", "3", "!", "@", "#"});
-        //vocabulary = new Vocabulary(vocabMap);
 
         // Set up special tokens
         specialTokens = new HashMap<>();
@@ -79,7 +76,6 @@ class TokenizerTest {
             tokenizer.encode("ab<|endoftext|>", Set.of());;
         });
 
-        //assertTrue(exception.getMessage().contains("Token or special token \"endoftext\" not present, failed on \"e\""));
         assertThat(exception.getMessage(), containsString("Token or special token \"endoftext\" not present, failed on \"n\""));
     }
 

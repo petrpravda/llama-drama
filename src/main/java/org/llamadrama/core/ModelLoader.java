@@ -1,5 +1,6 @@
 package org.llamadrama.core;
 
+import org.llamadrama.gguf.GGUFloatTensor;
 import org.llamadrama.tensor.BF16FloatTensor;
 import org.llamadrama.tensor.F16FloatTensor;
 import org.llamadrama.tensor.FloatTensor;
@@ -70,44 +71,12 @@ public final class ModelLoader {
 
             LlamaModel.Weights weights = null;
             if (loadWeights) {
-                Map<String, GGMLTensorEntry> tensorEntries = GGUF.loadTensors(fileChannel, gguf.getTensorDataOffset(), gguf.getTensorInfos());
+                Map<String, GGMLTensorEntry> tensorEntries = GGUFloatTensor.loadTensors(fileChannel, gguf.getTensorDataOffset(), gguf.getTensorInfos());
                 weights = loadWeights(tensorEntries, config);
             }
             return new LlamaModel(config, tokenizer, weights);
         }
     }
-
-//    public static QwenModel loadModel(FileChannel fileChannel, GGUF gguf, int contextLength, boolean loadWeights) throws IOException {
-//        try (var ignored = Timer.log("Load Qwen2 model")) {
-//            Map<String, Object> metadata = gguf.getMetadata();
-//            Vocabulary vocabulary = loadVocabulary(metadata); // Ensure compatibility with Qwen2's tokenizer
-//            Tokenizer tokenizer = createTokenizer(metadata, vocabulary); // Use a tokenizer tailored for Qwen2
-//
-//            // Update configuration keys to match Qwen2 metadata
-//            QwenModel.Configuration config = new QwenModel.Configuration(
-//                    (int) metadata.get("qwen.embedding_length"),
-//                    (int) metadata.get("qwen.feed_forward_length"),
-//                    (int) metadata.get("qwen.block_count"),
-//                    (int) metadata.get("qwen.attention.head_count"),
-//                    (int) metadata.getOrDefault("qwen.attention.head_count_kv",
-//                            metadata.get("qwen.attention.head_count")),
-//                    vocabulary.size(),
-//                    contextLength,
-//                    (float) metadata.getOrDefault("qwen.attention.layer_norm_rms_epsilon", 1e-5f),
-//                    (float) metadata.getOrDefault("qwen.rope.freq_base", 10000f)
-//            );
-//
-//            // Handle weights loading for Qwen2
-//            QwenModel.Weights weights = null;
-//            if (loadWeights) {
-//                Map<String, GGMLTensorEntry> tensorEntries = GGUF.loadTensors(fileChannel, gguf.getTensorDataOffset(), gguf.getTensorInfos());
-//                weights = loadWeights(tensorEntries, config); // Ensure compatibility with Qwen2's tensor formats
-//            }
-//
-//            return new QwenModel(config, tokenizer, weights);
-//        }
-//    }
-
 
     public static LlamaModel.Weights loadWeights(Map<String, GGMLTensorEntry> tensorEntries, LlamaModel.Configuration config) {
         boolean ropeScaling = tensorEntries.containsKey("rope_freqs");

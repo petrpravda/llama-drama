@@ -6,6 +6,7 @@ import org.llamadrama.core.Options;
 import org.llamadrama.core.Timer;
 import org.llamadrama.gguf.GGMLTensorEntry;
 import org.llamadrama.gguf.GGUF;
+import org.llamadrama.gguf.GGUFloatTensor;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -73,7 +74,7 @@ public final class AOT {
         try (var timer = Timer.log("Load tensors from pre-loaded model");
              var fileChannel = FileChannel.open(modelPath, StandardOpenOption.READ)) {
             // Load only the tensors (mmap slices).
-            Map<String, GGMLTensorEntry> tensorEntries = GGUF.loadTensors(fileChannel, preLoaded.tensorDataOffset(), preLoaded.tensorInfos());
+            Map<String, GGMLTensorEntry> tensorEntries = GGUFloatTensor.loadTensors(fileChannel, preLoaded.tensorDataOffset(), preLoaded.tensorInfos());
             LlamaModel.Weights weights = ModelLoader.loadWeights(tensorEntries, baseModel.configuration());
             return new LlamaModel(baseModel.configuration().withContextLength(contextLength), baseModel.tokenizer(), weights);
         }
